@@ -1,0 +1,134 @@
+@starFieldWidth: 1500;
+@starFieldHeight: 1500;
+@starStartOffset: 600px;
+
+@starOneScrollDuration: 100s;
+@starTwoScrollDuration: 125s;
+@starThreeScrollDuration: 175s;
+@numStarOneStars: 70;
+@numStarTwoStars: 50;
+@numStarThreeStars: 30;
+@numShootingStars: 10;
+
+@stars: 1px 1px #fff;
+
+@keyframes animStar {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(~"@{starFieldHeight}px") translateX(~"@{starFieldWidth}px");
+    }
+}
+
+@keyframes animShootingStar {
+
+    from {
+        transform: translateY(0px) translateX(0px) rotate(-45deg);
+        opacity: 1;
+        height: 5px;
+    }
+
+    to {
+        transform: translateY(~"-@{starFieldHeight}px") translateX(~"-@{starFieldWidth}px") rotate(-45deg);
+        opacity: 1;
+        height: 800px;
+    }
+
+}
+
+.idx {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgb(25, 35, 61), rgb(100, 44, 143));
+    display: flex;
+    justify-content: center;
+}
+
+.makeRandom(@min: 0, @max: @min+1, @int: 0) { 
+    .checkInt() {
+      @getNum: `Math.random() * (@{max} - @{min} + @{int})`;
+      @base: unit(`@{int} == 1 ? Math.floor(@{getNum}) : @{getNum}`);
+    }
+    @getNum1: `Math.random() * (@{max} - @{min} + @{int})`;
+    @base1: unit(`@{int} == 1 ? Math.floor(@{getNum1}) : @{getNum1}`);
+    @randNum1: 1px * (@base1 + @min);
+
+    @getNum2: `Math.random() * (@{max} - @{min} + @{int})`;
+    @base2: unit(`@{int} == 1 ? Math.floor(@{getNum2}) : @{getNum2}`);
+    @randNum2: 1px * (@base2 + @min);
+}
+  
+// .create-stars(@numStars, @i: 1, @n: 0px 0px #fff) when (@i =< @numStars) {
+//     .makeRandom(@min: -@starFieldWidth, @max: @starFieldWidth);
+//     @star: @n, @randNum1 @randNum2 #fff;
+//     .create-stars(@numStars, (@i + 1), @star);
+// }
+.if(@i, @numStars, @stars) when (@i = @numStars) {
+    box-shadow: @stars;
+}
+.create-stars(@numStars, @i: 1, @n: 0px 0px #fff, @fix: "stars") when (@i =< @numStars) {
+    .makeRandom(@min: -@starFieldWidth, @max: @starFieldWidth);
+    // @{tmp}: @n;
+    .if(@i, @numStars, @star);
+    @star: @n, @randNum1 @randNum2 #fff;
+    .create-stars(@numStars, (@i + 1), @star);
+}
+  
+.star-template(@numStars, @starSize, @scrollSpeed) {
+    z-index: 1;
+    width: @starSize;
+    height: @starSize;
+    border-radius: 50%;
+    background: transparent;
+    animation: animStar @scrollSpeed linear infinite;
+    .create-stars(@numStars);
+    &:after {
+        content: " ";
+        top: -@starStartOffset;
+        width: @starSize;
+        height: @starSize;
+        border-radius: 50%;
+        position: absolute;
+        background: transparent;
+        
+        .create-stars(@numStars);
+    }
+}
+
+.star1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .star-template(@numStarOneStars, 2px, @starOneScrollDuration);
+}
+.star2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .star-template(@numStarTwoStars, 2.5px, @starTwoScrollDuration);
+}
+.star3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .star-template(@numStarThreeStars, 3px, @starThreeScrollDuration);
+}
+
+.shooting-star-template(@numStars, @starSize, @speed) {
+    z-index: 1;
+    width: @starSize;
+    height: @starSize + 80px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+    animation: animShootingStar @speed linear infinite;
+}
+
+.shootingStars {
+    .shooting-star-template(@numShootingStars, 5px, 10s)
+}
