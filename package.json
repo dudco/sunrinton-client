@@ -2,7 +2,11 @@
   "name": "sunrinthon",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000/",
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.18.0",
+    "mongoose": "^5.1.5",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-scripts-ts": "2.16.0"
@@ -11,7 +15,7 @@
     "build-css": "node-less-chokidar src --source-map-contents",
     "watch-css": "node-less-chokidar src --source-map-contents --watch",
     "start": "npm run build-css && run-p -ncr watch-css start-ts",
-    "start-ts": "cross-env BROWSER=false react-app-rewired start --scripts-version react-scripts-ts",
+    "start-ts": "cross-env BROWSER=false PORT=3001 react-app-rewired start --scripts-version react-scripts-ts",
     "build": "react-app-rewired build --scripts-version react-scripts-ts",
     "test": "react-app-rewired test --scripts-version react-scripts-ts --env=jsdom",
     "eject": "react-scripts-ts eject"

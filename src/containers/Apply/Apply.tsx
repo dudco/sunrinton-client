@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import axios from 'axios';
+
 import * as classNames from 'classnames/bind';
 import * as styles from './Apply.less';
 const cx = classNames.bind(styles);
@@ -145,6 +147,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
 
   private onClickConfirm() {
     console.log(this.state);
+    axios.post('/api/apply', this.state)
   }
 
   private onChangeName(e: React.FormEvent<HTMLInputElement>) {

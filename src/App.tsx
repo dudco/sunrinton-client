@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 
+import axios from 'axios';
+
 import * as styles from "./App.less";
 
 // import About from './componenets/About/About';
@@ -8,6 +10,11 @@ import Apply from './containers/Apply/Apply';
 import Home from './containers/Home/Home';
 
 class App extends React.Component {
+  public componentDidMount() {
+    axios.get('/api/test').then((res) => {
+      console.log(res.data);
+    })
+  }
   public render() {
     return (
       <div className={styles.idx}>
