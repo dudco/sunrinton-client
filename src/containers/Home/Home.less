@@ -1,22 +1,64 @@
+@cloudeMoveOffset: 10px;
 @keyframes moveclouds1 {
-    0% {
-        transform: 0;
+    from,
+    to {
+        transform: translateX(0);
     }
-
-    25% {
-        transform: 30px;
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-@cloudeMoveOffset)
     }
-
-    50% {
-        transform: 0;
+    
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(@cloudeMoveOffset)
     }
+}
 
-    75% {
-        transform: -30px;
+@keyframes moveclouds2 {
+    from,
+    to {
+        transform: translateX(0);
     }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(@cloudeMoveOffset)
+    }
+    
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(-@cloudeMoveOffset)
+    }
+}
 
-    100% {
-        transform: 0;
+@keyframes moveclouds3 {
+    from,
+    to {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-@cloudeMoveOffset*2)
+    }
+    
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(@cloudeMoveOffset*3)
     }
 }
 
@@ -111,21 +153,30 @@
     z-index: -1;
 
     &.x1 {
-        animation: moveclouds1 30s linear infinite;
+        animation: moveclouds1 50s linear infinite;
+        // -moz-animation: moveclouds1 30s linear infinite;
+        // -webkit-animation: moveclouds1 30s linear infinite;
+        // -o-animation: moveclouds1 30s linear infinite;
         top: 180px;
-        left: -30px;
-        width: 200px;
+        left: -10px;
+        width: 150px;
         height: 100px;
     }
     &.x2 {
-        animation: moveclouds1 30s linear infinite;
+        animation: moveclouds3 90s linear infinite;
+        // -moz-animation: moveclouds1 30s linear infinite;
+        // -webkit-animation: moveclouds1 30s linear infinite;
+        // -o-animation: moveclouds1 30s linear infinite;
         top: 130px;
-        right: -10px;
+        right: -40px;
         width: 170px;
         height: 130px;
     }
     &.x3 {
-        animation: moveclouds2 30s linear infinite;
+        animation: moveclouds2 70s linear infinite;
+        // -moz-animation: moveclouds2 30s linear infinite;
+        // -webkit-animation: moveclouds2 30s linear infinite;
+        // -o-animation: moveclouds2 30s linear infinite;
         top: 80px;
         right: 150px;
         width: 130px;
