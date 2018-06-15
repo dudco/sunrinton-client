@@ -9,6 +9,7 @@ const cx = classNames.bind(styles);
 // export interface ApplyProps {
 // }
 
+
 export interface ApplyState {
   name: string;
   gender: string;
@@ -18,6 +19,7 @@ export interface ApplyState {
   role: string;
   type: string;
   project: string;
+  portpolio: File;
   size: string;
 }
 
@@ -34,14 +36,17 @@ export default class Apply extends React.Component<{}, ApplyState> {
       role: "",
       type: "",
       project: "",
+      portpolio: null,
       size: "",
     }
 
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
+    this.onKeyDownPhone = this.onKeyDownPhone.bind(this);
     this.onChangeSID = this.onChangeSID.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
     this.onChangeProject = this.onChangeProject.bind(this);
+    this.onChangePortPolio = this.onChangePortPolio.bind(this);
 
     this.onChangeGender = this.onChangeGender.bind(this);
     this.onChangeRole = this.onChangeRole.bind(this);
@@ -65,10 +70,10 @@ export default class Apply extends React.Component<{}, ApplyState> {
               <div>
                 <span>이름</span>
                 <div>
-                  <input type="text" placeholder="이름을 입력해 주세요." onChange={this.onChangeName} tabIndex={1}/>
+                  <input type="text" placeholder="이름을 입력해 주세요." onChange={this.onChangeName} tabIndex={1} />
                   <div>
-                    <button onClick={this.onChangeGender} className={cx({checked: this.state.gender === "남"})}>남</button>
-                    <button onClick={this.onChangeGender} className={cx({checked: this.state.gender === "여"})}>여</button>
+                    <button onClick={this.onChangeGender} className={cx({ checked: this.state.gender === "남" })}>남</button>
+                    <button onClick={this.onChangeGender} className={cx({ checked: this.state.gender === "여" })}>여</button>
                   </div>
                 </div>
               </div>
@@ -76,69 +81,75 @@ export default class Apply extends React.Component<{}, ApplyState> {
               <div>
                 <span>연락처</span>
                 <div>
-                  <input type="text" placeholder="ex) 010-2254-2776" onChange={this.onChangePhone} tabIndex={2}/>
+                  <input
+                    type="text"
+                    placeholder="ex) 010-2254-2776"
+                    onChange={this.onChangePhone}
+                    maxLength={13}
+                    tabIndex={2}
+                    value={this.state.phone}
+                    onKeyDown={this.onKeyDownPhone}
+                  />
                 </div>
               </div>
               {/* 학번 */}
               <div>
                 <span>학번</span>
                 <div>
-                  <input type="text" placeholder="31104" onChange={this.onChangeSID} maxLength={5} tabIndex={3}/>
+                  <input type="text" placeholder="31104" onChange={this.onChangeSID} maxLength={5} tabIndex={3} />
                 </div>
               </div>
               {/* 팀명 */}
               <div>
                 <span>팀명</span>
                 <div>
-                  <input type="text" placeholder="10글자이내로 입력해주세요." onChange={this.onChangeTeam} maxLength={10} tabIndex={4}/>
+                  <input type="text" placeholder="10글자이내로 입력해주세요." onChange={this.onChangeTeam} maxLength={10} tabIndex={4} />
                 </div>
               </div>
               {/* 직군 */}
               <div>
                 <span>직군</span>
                 <div>
-                  <button onClick={this.onChangeRole} className={cx({checked: this.state.role === "팀장"})}>팀장</button>
-                  <button onClick={this.onChangeRole} className={cx({checked: this.state.role === "개발"})}>개발</button>
-                  <button onClick={this.onChangeRole} className={cx({checked: this.state.role === "디자인"})}>디자인</button>
+                  <button onClick={this.onChangeRole} className={cx({ checked: this.state.role === "팀장" })}>팀장</button>
+                  <button onClick={this.onChangeRole} className={cx({ checked: this.state.role === "개발" })}>개발</button>
+                  <button onClick={this.onChangeRole} className={cx({ checked: this.state.role === "디자인" })}>디자인</button>
                 </div>
               </div>
               {/* 분야 */}
               <div>
                 <span>분야</span>
                 <div>
-                  <button onClick={this.onChangeType} className={cx({checked: this.state.type === "생활"})}>생활</button>
-                  <button onClick={this.onChangeType} className={cx({checked: this.state.type === "게임"})}>게임</button>
+                  <button onClick={this.onChangeType} className={cx({ checked: this.state.type === "생활" })}>생활</button>
+                  <button onClick={this.onChangeType} className={cx({ checked: this.state.type === "게임" })}>게임</button>
                 </div>
               </div>
               {/* 포트폴리오 */}
               <div>
                 <span>포트폴리오</span>
-                <input type="file" id="portfolio" />
+                <input type="file" id="portfolio" onChange={this.onChangePortPolio} />
                 <label htmlFor="portfolio">파일선택</label>
-                <span>20MB 이내로 첨부해주세요 (선택)</span>
+                <span>{this.state.portpolio ? this.state.portpolio.name : "20MB 이내로 첨부해주세요 (선택)"}</span>
               </div>
               {/* 프로젝트 */}
               <div>
                 <span>프로젝트</span>
-                <textarea placeholder="참여했던 프로젝트 등을 설명해주세요. (500자 이내)" maxLength={500} onChange={this.onChangeProject} tabIndex={5}/>
+                <textarea placeholder="참여했던 프로젝트 등을 설명해주세요. (500자 이내)" maxLength={500} onChange={this.onChangeProject} tabIndex={5} />
               </div>
               {/* 사이즈 */}
               <div>
                 <span>사이즈</span>
                 <div>
-                  <button onClick={this.onChangeSize} className={cx({checked: this.state.size === "S"})}>S</button>
-                  <button onClick={this.onChangeSize} className={cx({checked: this.state.size === "M"})}>M</button>
-                  <button onClick={this.onChangeSize} className={cx({checked: this.state.size === "L"})}>L</button>
-                  <button onClick={this.onChangeSize} className={cx({checked: this.state.size === "XL"})}>XL</button>
+                  <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "S" })}>S</button>
+                  <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "M" })}>M</button>
+                  <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "L" })}>L</button>
+                  <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "XL" })}>XL</button>
                 </div>
               </div>
 
               <div>
                 <button className={styles.checked} onClick={this.onClickConfirm}>신청하기</button>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
@@ -146,35 +157,72 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   private onClickConfirm() {
-    console.log(this.state);
-    axios.post('/api/apply', this.state)
+    const form = new FormData();
+    const state = this.state;
+    form.append("team", state.team);
+    form.append("name", state.name);
+    form.append("gender", state.gender);
+    form.append("phone", state.phone);
+    form.append("portpolio", state.portpolio);
+    form.append("project", state.project);
+    form.append("role", state.role);
+    form.append("sID", state.sID);
+    form.append("size", state.size);
+    form.append("type", state.type);
+    axios.post('/api/apply', form);
   }
 
   private onChangeName(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({name: e.currentTarget.value})
+    this.setState({ name: e.currentTarget.value })
   }
   private onChangePhone(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({phone: e.currentTarget.value})
+    const inputber = e.currentTarget.value;
+    let newInput: string = " ";
+    newInput = inputber;
+    if (newInput.length === 3) {
+      newInput += '-';
+    }
+    if (newInput.length === 8) {
+      newInput += '-';
+    }
+    this.setState({ phone: newInput })
   }
+  private onKeyDownPhone(e: React.KeyboardEvent<HTMLInputElement>) {
+    if(e.keyCode === 8 && (this.state.phone.length === 4 || this.state.phone.length === 9)) {
+      this.setState({phone: this.state.phone.substring(0, this.state.phone.length - 1)})
+    }
+  }
+
   private onChangeTeam(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({team: e.currentTarget.value})
+    this.setState({ team: e.currentTarget.value })
   }
   private onChangeSID(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({sID: e.currentTarget.value})
+    this.setState({ sID: e.currentTarget.value })
   }
   private onChangeProject(e: React.FormEvent<HTMLTextAreaElement>) {
-    this.setState({project: e.currentTarget.value})
+    this.setState({ project: e.currentTarget.value })
+  }
+  private onChangePortPolio(e: React.FormEvent<HTMLInputElement>) {
+    const file = e.currentTarget.files[0];
+
+    if (file != null) {
+      if (file.size > 20971520) {
+        alert('20MB초과')
+      } else {
+        this.setState({ portpolio: e.currentTarget.files[0] });
+      }
+    }
   }
   private onChangeGender(e: React.FormEvent<HTMLButtonElement>) {
-    this.setState({gender: e.currentTarget.innerText})
+    this.setState({ gender: e.currentTarget.innerText })
   }
   private onChangeRole(e: React.FormEvent<HTMLButtonElement>) {
-    this.setState({role: e.currentTarget.innerText})
+    this.setState({ role: e.currentTarget.innerText })
   }
   private onChangeType(e: React.FormEvent<HTMLButtonElement>) {
-    this.setState({type: e.currentTarget.innerText})    
+    this.setState({ type: e.currentTarget.innerText })
   }
   private onChangeSize(e: React.FormEvent<HTMLButtonElement>) {
-    this.setState({size: e.currentTarget.innerText})    
+    this.setState({ size: e.currentTarget.innerText })
   }
 }
