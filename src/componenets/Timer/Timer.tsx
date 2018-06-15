@@ -10,6 +10,7 @@ interface TimerProps {
 // var h = Math.floor((distance / (1000*60*60)) % 24);//시간
 // var m = Math.floor((distance / (1000*60)) % 60);//분
 // var s = Math.floor((distance / 1000) % 60);//초
+// test
 
 const Timer: React.SFC<TimerProps> = (props) => {
   return (
