@@ -10,7 +10,8 @@
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-preload": "^0.5.1",
-    "react-scripts-ts": "2.16.0"
+    "react-scripts-ts": "2.16.0",
+    "react-spinners": "^0.3.2"
   },
   "scripts": {
     "build-css": "node-less-chokidar src --source-map-contents",
