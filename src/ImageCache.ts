@@ -3,11 +3,7 @@ const cache = [];
 
 const add = (url, options = {isFont: false}) => {
     if (!hash[url]) {
-        if(options.isFont) {
-            hash[url] = new HTMLFontElement();
-        }else {
-            hash[url] = new Image();
-        }
+        hash[url] = new Image();
 
         // if (options.crossOrigin) {
         //     hash[url].crossOrigin = options.crossOrigin;

@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { Redirect } from 'react-router';
 
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import * as classNames from 'classnames/bind';
 import * as styles from './Apply.less';
@@ -21,6 +22,8 @@ export interface ApplyState {
   project: string;
   portpolio: File;
   size: string;
+
+  redirect: string;
 }
 
 export default class Apply extends React.Component<{}, ApplyState> {
@@ -38,6 +41,8 @@ export default class Apply extends React.Component<{}, ApplyState> {
       project: "",
       portpolio: null,
       size: "",
+
+      redirect: "",
     }
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -57,6 +62,9 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   public render() {
+    if(this.state.redirect !== "") {
+      return <Redirect to={this.state.redirect}/>
+    }
     return (
       <div className={styles.idx}>
         <div>
@@ -143,6 +151,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
                   <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "M" })}>M</button>
                   <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "L" })}>L</button>
                   <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "XL" })}>XL</button>
+                  <button onClick={this.onChangeSize} className={cx({ checked: this.state.size === "2XL" })}>2XL</button>
                 </div>
               </div>
 
@@ -157,20 +166,44 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   private onClickConfirm() {
-    // if(this.state.g)
-    const form = new FormData();
-    const state = this.state;
-    form.append("team", state.team);
-    form.append("name", state.name);
-    form.append("gender", state.gender);
-    form.append("phone", state.phone);
-    form.append("portpolio", state.portpolio);
-    form.append("project", state.project);
-    form.append("role", state.role);
-    form.append("sID", state.sID);
-    form.append("size", state.size);
-    form.append("type", state.type);
-    axios.post('/api/apply', form);
+    if(this.state.name === "") {
+      alert("이름을 입력해주세요")
+    } else if(this.state.gender === ""){
+      alert("'남/여'를 선택해주세요")
+    } else if(this.state.phone === ""){
+      alert("전화번호를 입력해주세요")
+    } else if(this.state.sID === ""){
+      alert("학번을 입력해주세요")
+    } else if(this.state.team === ""){
+      alert("팀명을 입력해주세요")
+    } else if(this.state.role === ""){
+      alert("직군을 선택해주세요")
+    } else if(this.state.type === ""){
+      alert("참여분야를 선택해주세요")
+    } else if(this.state.size === ""){
+      alert("티셔츠 사이즈를 선택해주세요")
+    } else {
+      const form = new FormData();
+      const state = this.state;
+      form.append("team", state.team);
+      form.append("name", state.name);
+      form.append("gender", state.gender);
+      form.append("phone", state.phone);
+      form.append("portpolio", state.portpolio);
+      form.append("project", state.project);
+      form.append("role", state.role);
+      form.append("sID", state.sID);
+      form.append("size", state.size);
+      form.append("type", state.type);
+      axios.post('/api/apply', form).then((res: AxiosResponse) => {
+        if(res.status === 200){
+          alert(`${state.name}님 신청해주세서 감사합니다 ^~^`);
+          this.setState({redirect: "/"});
+        } else {
+          alert(`오류가 발생했습니다!! 지금 바로 페이지로 연락부탁드립니다. ㅜㅜ 죄송합니다 ㅠㅠ`);
+        }
+      })
+    }
   }
 
   private onChangeName(e: React.FormEvent<HTMLInputElement>) {
