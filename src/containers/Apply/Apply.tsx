@@ -157,6 +157,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   private onClickConfirm() {
+    // if(this.state.g)
     const form = new FormData();
     const state = this.state;
     form.append("team", state.team);
