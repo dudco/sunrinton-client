@@ -13,7 +13,7 @@ import * as styles from "./App.less";
 
 
 // import About from './componenets/About/About';
-import Admin from './containers/Admin/Admin';
+// import Admin from './containers/Admin/Admin';
 import Apply from './containers/Apply/Apply';
 import Home from './containers/Home/Home';
 import Preload from './Preload';
@@ -51,13 +51,13 @@ class App extends React.Component<AppProps, any> {
         resolveOnError={false}
         mountChildren={true}
       >
-        {
+        {/* {
           this.props.history.location.pathname === "/admin" ?
             <Route
               exact={true}
               path="/admin"
               component={Admin}
-            /> :
+            /> : */}
             <div className={styles.idx}>
               <Route
                 exact={true}
@@ -76,7 +76,7 @@ class App extends React.Component<AppProps, any> {
               <div className={styles.star3} />
               <div className={styles.shootingStars} />
             </div>
-        }
+        {/* } */}
       </Preload>
     );
   }
