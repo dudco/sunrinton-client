@@ -75,7 +75,7 @@ export default class Preload extends React.Component<PreloadProps, any> {
     private _handleSuccess() {
         if (this.autoResolveTimeout) {
             clearTimeout(this.autoResolveTimeout);
-            console.warn('images failed to preload, auto resolving');
+            // console.warn('images failed to preload, auto resolving');
         }
 
         if (this.state.ready || !this.mounted) {

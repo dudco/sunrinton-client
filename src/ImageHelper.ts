@@ -48,7 +48,7 @@ const ImageHelper = {
     loadImages(urls, options = {isFont: false}) {
         const promises = urls.map(url =>  this.loadImage(url, options));
         return Promise.all(promises).catch((err) => {
-            console.warn(err.message);
+            // console.warn(err.message);
         });
     },
 

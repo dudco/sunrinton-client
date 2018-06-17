@@ -16,7 +16,7 @@ const Loading: React.SFC<{}> = props => (
 
 export interface CheckModalProps {
     show: string;
-    onClickConfirm: (sID: string) => void;
+    onClickConfirm?: (sID: string) => void;
     onClickCancel: () => void;
     animationEnd: () => void;
 }

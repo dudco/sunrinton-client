@@ -79,7 +79,6 @@ export default class Home extends React.Component<HomeProps, HomeState> {
         </div>
         <CheckModal 
           show={this.state.showCheckModal}
-          onClickConfirm={this.cmClickConfirm}
           onClickCancel={this.cmClickCancel}
           animationEnd={this.cmAnimationEnd}
         />
@@ -92,12 +91,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   }
 
   private onClickCheck() {
-    console.log(this.state.showCheckModal)
     this.setState({showCheckModal: "show"});
-  }
-
-  private cmClickConfirm(sID: string) {
-    console.log(sID);
   }
 
   private cmClickCancel() {
