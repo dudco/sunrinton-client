@@ -39,7 +39,6 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     this.update = this.update.bind(this);
     this.onClickCheck = this.onClickCheck.bind(this);
 
-    this.cmClickConfirm = this.cmClickConfirm.bind(this);
     this.cmClickCancel = this.cmClickCancel.bind(this);
     this.cmAnimationEnd = this.cmAnimationEnd.bind(this);
   }
