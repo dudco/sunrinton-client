@@ -93,16 +93,18 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
     private onClickConfirm() {
         this.props.onClickConfirm(this.state.sID);
 
-        this.setState({ loading: true });
-        axios.get(`/api/user/${this.state.sID}`)
-            .then((res: AxiosResponse) => {
-                this.setState({ loading: false });
-                if (res.status === 200) {
-                    this.setState({ name: res.data.name, team: res.data.team });
-                } else {
-                    this.setState({ name: "err", team: "err" });
-                }
-            })
+        if(this.state.sID !== "") {
+            this.setState({ loading: true });
+            axios.get(`/api/user/${this.state.sID}`)
+                .then((res: AxiosResponse) => {
+                    this.setState({ loading: false });
+                    if (res.status === 200) {
+                        this.setState({ name: res.data.name, team: res.data.team });
+                    } else {
+                        this.setState({ name: "err", team: "err" });
+                    }
+                })
+        }
     }
 
     private onClickCancel() {
