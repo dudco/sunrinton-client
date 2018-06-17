@@ -12,6 +12,7 @@ import cloud1 from '../../assets/images/cloud1.png';
 import cloud2 from '../../assets/images/cloud2.png';
 import cloud3 from '../../assets/images/cloud3.png';
 import desk from '../../assets/images/desk.png';
+import CheckModal from '../CheckModal/CheckModal';
 // import stars from '../../assets/images/stars.png';
 
 // import Timer from '../../componenets/Timer/Timer';
@@ -22,6 +23,7 @@ export interface HomeProps {
 
 export interface HomeState {
   timer: number;
+  showCheckModal: string;
 }
 
 export default class Home extends React.Component<HomeProps, HomeState> {
@@ -29,8 +31,17 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
   constructor(props: HomeProps) {
     super(props);
-    this.state = { timer: props.dDay.getTime() - new Date().getTime() };
+    this.state = { 
+      timer: props.dDay.getTime() - new Date().getTime(),
+      showCheckModal: "disabled",
+    };
+
     this.update = this.update.bind(this);
+    this.onClickCheck = this.onClickCheck.bind(this);
+
+    this.cmClickConfirm = this.cmClickConfirm.bind(this);
+    this.cmClickCancel = this.cmClickCancel.bind(this);
+    this.cmAnimationEnd = this.cmAnimationEnd.bind(this);
   }
 
   public componentDidMount() {
@@ -63,13 +74,39 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
           {/* <Timer time={this.state.timer}/> */}
           <Link to="apply">GET STARTED</Link>
+          <button onClick={this.onClickCheck}>확인하기</button>
           {/* <span>신청까지 얼마남지 않았어요!</span> */}
         </div>
+        <CheckModal 
+          show={this.state.showCheckModal}
+          onClickConfirm={this.cmClickConfirm}
+          onClickCancel={this.cmClickCancel}
+          animationEnd={this.cmAnimationEnd}
+        />
       </div>
     );
   }
 
   private update() {
     this.setState({ timer: this.props.dDay.getTime() - new Date().getTime() })
+  }
+
+  private onClickCheck() {
+    console.log(this.state.showCheckModal)
+    this.setState({showCheckModal: "show"});
+  }
+
+  private cmClickConfirm(sID: string) {
+    console.log(sID);
+  }
+
+  private cmClickCancel() {
+    this.setState({showCheckModal: "disable"});
+  }
+
+  private cmAnimationEnd() {
+    if(this.state.showCheckModal === "disable") {
+      this.setState({showCheckModal: "disabled"})
+    }
   }
 }

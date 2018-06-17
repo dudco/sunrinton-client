@@ -5,7 +5,9 @@
   "proxy": "http://localhost:3000/",
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/history": "^4.6.2",
     "axios": "^0.18.0",
+    "history": "^4.7.2",
     "mongoose": "^5.1.5",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",

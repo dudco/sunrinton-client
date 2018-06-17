@@ -200,7 +200,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
           alert(`${state.name}님 신청해주세서 감사합니다 ^~^`);
           this.setState({redirect: "/"});
         } else {
-          alert(`오류가 발생했습니다!! 지금 바로 페이지로 연락부탁드립니다. ㅜㅜ 죄송합니다 ㅠㅠ`);
+          alert(`이미 제출하셨습니다. 수정을 원하시면 페이지로 문의 부탁드립니다.`);
         }
       })
     }

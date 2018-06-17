@@ -1,0 +1,124 @@
+@keyframes bounceInDown {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+  
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -3000px, 0);
+    }
+  
+    60% {
+      opacity: 1;
+      transform: translate3d(0, 25px, 0);
+    }
+  
+    75% {
+      transform: translate3d(0, -10px, 0);
+    }
+  
+    90% {
+      transform: translate3d(0, 5px, 0);
+    }
+  
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes bounceOutUp {
+    20% {
+      transform: translate3d(0, -10px, 0);
+    }
+  
+    40%,
+    45% {
+      opacity: 1;
+      transform: translate3d(0, 20px, 0);
+    }
+  
+    to {
+      opacity: 0;
+      transform: translate3d(0, -2000px, 0);
+    }
+  }
+
+.idx {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #00000033;
+    z-index: 100;
+
+    &.show {
+        display: flex;
+        & > div {
+            animation: bounceInDown 0.5s;
+        }
+    }
+
+    &.none {
+        display: flex;
+        & > div {
+            animation: bounceOutUp 0.5s;
+        }
+    }
+
+    &>div {
+        margin-top: 200px;
+        width: 300px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        background: #fff;
+        padding: 10px;
+        border: 1px solid #4B2874;
+        border-radius: 10px;
+        &>input {
+            width: 80%;
+            height: 30px;
+            border: 1px solid #4B2874;
+            outline: none;
+            border-radius: 5px;
+            padding: 0 10px 0 10px;
+            box-sizing: border-box;
+        }
+        &>span {
+            font-family: 'ch';
+            font-weight: 100;
+            font-size: 14px;
+        }
+        &>div {
+            width: 80%;
+            display: flex;
+            justify-content: space-around;
+            &>button {
+                width: 40%;
+                height: 30px;
+                border: 1px solid #4B2874;
+                border-radius: 5px;
+                color: #4B2874;
+                background-color: white;
+                text-decoration: none;
+                cursor: pointer;
+                outline: none;
+                font-family: 'ch';
+                font-size: 13px;
+                font-weight: 100;
+                &:nth-child(2) {
+                    color: #fff;
+                    background-color: #4B2874;
+                }
+            }
+        }
+    }
+}
