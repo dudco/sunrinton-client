@@ -208,7 +208,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
       axios.post('/api/apply', form).then((res: AxiosResponse) => {
         this.setState({loading: false});
         if (res.status === 200) {
-          alert(`${state.name}님 신청해주세서 감사합니다 ^~^`);
+          alert(`${state.name}님 신청해주셔서 감사합니다 ^~^`);
           this.setState({redirect: "/"});
         } else {
           alert(`이미 제출하셨습니다. 수정을 원하시면 페이지로 문의 부탁드립니다.`);
