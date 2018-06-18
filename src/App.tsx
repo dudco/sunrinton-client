@@ -7,10 +7,7 @@ import { MoonLoader } from 'react-spinners';
 import back from './assets/images/apply-back.png';
 import desk from './assets/images/desk.png';
 
-
-
 import * as styles from "./App.less";
-
 
 // import About from './componenets/About/About';
 // import Admin from './containers/Admin/Admin';

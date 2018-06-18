@@ -1,7 +1,7 @@
+import axios, { AxiosResponse } from 'axios';
 import * as React from 'react';
 import { Redirect } from 'react-router';
-
-import axios, { AxiosResponse } from 'axios';
+import { MoonLoader } from 'react-spinners';
 
 import * as classNames from 'classnames/bind';
 import * as styles from './Apply.less';
@@ -9,7 +9,13 @@ const cx = classNames.bind(styles);
 
 // export interface ApplyProps {
 // }
-
+const Loading = props => (
+  <div style={{ width: '100%', height: '100%', display: 'flex', position: 'fixed', justifyContent: 'center', alignItems: 'center', top: 0, left: 0, backgroundColor: "#00000033", zIndex: 100}}>
+    <MoonLoader
+      color={'#642c8f'}
+    />
+  </div>
+);
 
 export interface ApplyState {
   name: string;
@@ -24,6 +30,7 @@ export interface ApplyState {
   size: string;
 
   redirect: string;
+  loading: boolean;
 }
 
 export default class Apply extends React.Component<{}, ApplyState> {
@@ -43,6 +50,7 @@ export default class Apply extends React.Component<{}, ApplyState> {
       size: "",
 
       redirect: "",
+      loading: false,
     }
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -62,12 +70,13 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   public render() {
-    if(this.state.redirect !== "") {
-      return <Redirect to={this.state.redirect}/>
+    if (this.state.redirect !== "") {
+      return <Redirect to={this.state.redirect} />
     }
     return (
       <div className={styles.idx}>
         <div>
+        {this.state.loading && <Loading />}
           <div className={styles.container}>
             <span><span>제</span><span>4</span><span>회</span></span>
             <span>선린해커톤 참가신청서</span>
@@ -166,23 +175,24 @@ export default class Apply extends React.Component<{}, ApplyState> {
   }
 
   private onClickConfirm() {
-    if(this.state.name === "") {
+    if (this.state.name === "") {
       alert("이름을 입력해주세요")
-    } else if(this.state.gender === ""){
+    } else if (this.state.gender === "") {
       alert("'남/여'를 선택해주세요")
-    } else if(this.state.phone === ""){
+    } else if (this.state.phone === "") {
       alert("전화번호를 입력해주세요")
-    } else if(this.state.sID === ""){
+    } else if (this.state.sID === "") {
       alert("학번을 입력해주세요")
-    } else if(this.state.team === ""){
+    } else if (this.state.team === "") {
       alert("팀명을 입력해주세요")
-    } else if(this.state.role === ""){
+    } else if (this.state.role === "") {
       alert("직군을 선택해주세요")
-    } else if(this.state.type === ""){
+    } else if (this.state.type === "") {
       alert("참여분야를 선택해주세요")
-    } else if(this.state.size === ""){
+    } else if (this.state.size === "") {
       alert("티셔츠 사이즈를 선택해주세요")
     } else {
+      this.setState({ loading: true });
       const form = new FormData();
       const state = this.state;
       form.append("team", state.team);
@@ -196,7 +206,8 @@ export default class Apply extends React.Component<{}, ApplyState> {
       form.append("size", state.size);
       form.append("type", state.type);
       axios.post('/api/apply', form).then((res: AxiosResponse) => {
-        if(res.status === 200){
+        this.setState({loading: false});
+        if (res.status === 200) {
           alert(`${state.name}님 신청해주세서 감사합니다 ^~^`);
           this.setState({redirect: "/"});
         } else {
@@ -222,8 +233,8 @@ export default class Apply extends React.Component<{}, ApplyState> {
     this.setState({ phone: newInput })
   }
   private onKeyDownPhone(e: React.KeyboardEvent<HTMLInputElement>) {
-    if(e.keyCode === 8 && (this.state.phone.length === 4 || this.state.phone.length === 9)) {
-      this.setState({phone: this.state.phone.substring(0, this.state.phone.length - 1)})
+    if (e.keyCode === 8 && (this.state.phone.length === 4 || this.state.phone.length === 9)) {
+      this.setState({ phone: this.state.phone.substring(0, this.state.phone.length - 1) })
     }
   }
 
