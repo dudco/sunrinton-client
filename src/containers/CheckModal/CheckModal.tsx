@@ -91,7 +91,7 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
     }
 
     private onClickConfirm() {
-        this.props.onClickConfirm(this.state.sID);
+        // this.props.onClickConfirm(this.state.sID);
 
         if(this.state.sID !== "") {
             this.setState({ loading: true });
