@@ -25,6 +25,8 @@ export interface AdminState {
     check: boolean;
     users: User[];
 }
+
+const roleOrder: string[] = ["팀장", "개발", "디자인"];
 export default class Admin extends React.Component<{}, AdminState> {
     constructor(props) {
         super(props);
@@ -39,13 +41,25 @@ export default class Admin extends React.Component<{}, AdminState> {
         this.onChangePW = this.onChangePW.bind(this);
     }
 
+    public componentDidMount() {
+        this.state.users.sort((a: User, b: User) => {
+            if (a.team > b.team) {
+                return -1;
+            } else if(a.team < b.team){
+                return 1;
+            } else {
+                return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+            }
+        })
+    }
+
     public render() {
         if (this.state.check) {
             return (
                 <div className={styles.idx}>
                     <User header={true} />
                     {this.state.users.map((user, idx) => {
-                        return <User key={idx} header={false} user={user} />
+                        return <User idx={idx} key={idx} header={false} user={user} />
                     })}
                 </div>
             )
@@ -62,6 +76,7 @@ export default class Admin extends React.Component<{}, AdminState> {
     private onChangePW(e: React.FormEvent<HTMLInputElement>) {
         this.setState({ passwd: e.currentTarget.value });
     }
+
     private pwConfirm() {
         axios.post('/api/users', { passwd: this.state.passwd })
             .then((res: AxiosResponse) => {
@@ -94,11 +109,13 @@ export default class Admin extends React.Component<{}, AdminState> {
 interface UserProps {
     user?: User;
     header: boolean;
+    idx?: number;
 }
 
 
 const User: React.SFC<UserProps> = (props) => (
     <div className={styles.user}>
+        <span>{props.header ? "" : props.idx + 1}</span>
         <span>{props.header ? "팀명" : props.user.team}</span>
         <span>{props.header ? "이름" : props.user.name}</span>
         <span>{props.header ? "성별" : props.user.gender}</span>
