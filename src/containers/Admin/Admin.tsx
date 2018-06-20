@@ -125,7 +125,7 @@ const User: React.SFC<UserProps> = (props) => (
         <span>{props.header ? "분야" : props.user.type}</span>
         <span>{props.header ? "포트폴리오" : <button>다운로드</button>}</span>
         <span>{props.header ? "사이즈" : props.user.size}</span>
-        <span>{props.header ? "프로젝트" : props.user.project}</span>
+        <span>{props.header ? "프로젝트" : <pre>{props.user.project}</pre>}</span>
         <button>수정</button>
         <button>삭제</button>
     </div>
