@@ -41,18 +41,6 @@ export default class Admin extends React.Component<{}, AdminState> {
         this.onChangePW = this.onChangePW.bind(this);
     }
 
-    public componentDidMount() {
-        this.state.users.sort((a: User, b: User) => {
-            if (a.team > b.team) {
-                return -1;
-            } else if(a.team < b.team){
-                return 1;
-            } else {
-                return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
-            }
-        })
-    }
-
     public render() {
         if (this.state.check) {
             return (
@@ -81,7 +69,7 @@ export default class Admin extends React.Component<{}, AdminState> {
         axios.post('/api/users', { passwd: this.state.passwd })
             .then((res: AxiosResponse) => {
                 if (res.status === 200) {
-                    const users = res.data.map((user) => {
+                    let users = res.data.map((user) => {
                         return {
                             name: user.name,
                             team: user.team.name,
@@ -94,8 +82,16 @@ export default class Admin extends React.Component<{}, AdminState> {
                             size: user.size,
                             gender: user.gender
                         }
-                    })
-                    console.log(users, res.data);
+                    });
+                    users = users.sort((a: User, b: User) => {
+                        if (a.team < b.team) {
+                            return -1;
+                        } else if(a.team > b.team){
+                            return 1;
+                        } else {
+                            return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+                        }
+                    });
                     this.setState({ check: true, users })
                 }
                 else {
