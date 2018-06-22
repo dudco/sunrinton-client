@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import * as classNames from "classnames/bind";
 import * as styles from './Home.less';
@@ -72,7 +72,8 @@ export default class Home extends React.Component<HomeProps, HomeState> {
           <img src={cloud3} alt="" className={cx("cloud", "x3")}/>
 
           {/* <Timer time={this.state.timer}/> */}
-          <Link to="apply">GET STARTED</Link>
+          {/* <Link to="apply">GET STARTED</Link> */}
+          <span>신청해주셔서 감사합니다! <br/> 결과는 6/25일에 확인가능합니다.</span>
           <button onClick={this.onClickCheck}>확인하기</button>
           {/* <span>신청까지 얼마남지 않았어요!</span> */}
         </div>

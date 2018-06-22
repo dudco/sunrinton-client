@@ -10,7 +10,7 @@ import desk from './assets/images/desk.png';
 import * as styles from "./App.less";
 
 import Admin from './containers/Admin/Admin';
-import Apply from './containers/Apply/Apply';
+// import Apply from './containers/Apply/Apply';
 import Home from './containers/Home/Home';
 import Preload from './Preload';
 
@@ -60,11 +60,11 @@ class App extends React.Component<AppProps, any> {
                 path="/"
                 render={this.renderHome}
               />
-              <Route
+              {/* <Route
                 exact={true}
                 path="/apply"
                 component={Apply}
-              />
+              /> */}
 
               <div className={styles.star1} />
               <div className={styles.star2} />
