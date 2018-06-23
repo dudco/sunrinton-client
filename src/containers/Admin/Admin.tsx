@@ -42,7 +42,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             passwd: "",
             check: false,
             items: [],
-            params: null
+            params: null,
         }
 
         this.pwConfirm = this.pwConfirm.bind(this);
@@ -73,7 +73,6 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                     <div className={styles.idx}>
                         <User header={true} />
                         {this.state.items.map((user: User, idx) => {
-			   console.log(user)
                             return <User idx={idx} key={idx} header={false} user={user} />
                         })}
                     </div>
@@ -82,9 +81,8 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                 return (
                     <div className={styles.idx}>
                         <Team header={true} />
-                        {this.state.items.map((team, idx) => {
-			    console.log(team);
-                            return <Team idx={idx} key={idx} header={false} team={team} />
+                        {this.state.items.map((team: Team, idx) => {
+                            return <Team idx={idx} key={idx} header={false} team={team} onClickDownLoad={this.onClickTeamDownLoad} />
                         })}
                     </div>
                 )
@@ -123,12 +121,10 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
     }
 
     private getUsers() {
-        console.log("getUser!!");
         axios.post('/api/users', { passwd: this.state.passwd })
             .then((res: AxiosResponse) => {
                 if (res.status === 200) {
                     let items = res.data.map((user) => {
-			console.log(user)
                         return {
                             name: user.name,
                             team: user.team.name,
@@ -160,7 +156,6 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             })
     }
     private getTeams() {
-        console.log("getTeams!!");
         axios.post('/api/teams', { passwd: this.state.passwd })
             .then((res: AxiosResponse) => {
                 let items = res.data.map((team) => {
@@ -178,6 +173,13 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                 });
                 this.setState({ items, check: true });
             })
+    }
+
+    private onClickTeamDownLoad(name: string) {
+        axios.get(`/api/team/${name}`).then((res: AxiosResponse) => {
+           window.open(res.data, '_blank');
+           window.focus();
+        })
     }
 }
 
@@ -209,6 +211,7 @@ interface TeamProps {
     team?: Team;
     header: boolean;
     idx?: number;
+    onClickDownLoad?(name: string);
 }
 
 const Team: React.SFC<TeamProps> = (props) => (
@@ -221,7 +224,7 @@ const Team: React.SFC<TeamProps> = (props) => (
         {/* <span>{props.header ? "학번" : props.user.sID}</span> */}
         {/* <span>{props.header ? "직군" : props.user.role}</span> */}
         {/* <span>{props.header ? "분야" : props.user.type}</span> */}
-        <span>{props.header ? "포트폴리오" : <span>다운로드</span>}</span>
+        <span>{props.header ? "포트폴리오" : <button onClick={() => {props.onClickDownLoad(props.team.name)}}>다운로드</button>}</span>
         {/* <span>{props.header ? "사이즈" : props.user.size}</span> */}
         {/* <span>{props.header ? "프로젝트" : <pre>{props.user.project}</pre>}</span> */}
         <button>수정</button>
