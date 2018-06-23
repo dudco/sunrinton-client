@@ -73,6 +73,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                     <div className={styles.idx}>
                         <User header={true} />
                         {this.state.items.map((user: User, idx) => {
+			   console.log(user)
                             return <User idx={idx} key={idx} header={false} user={user} />
                         })}
                     </div>
@@ -82,6 +83,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                     <div className={styles.idx}>
                         <Team header={true} />
                         {this.state.items.map((team, idx) => {
+			    console.log(team);
                             return <Team idx={idx} key={idx} header={false} team={team} />
                         })}
                     </div>
@@ -126,6 +128,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             .then((res: AxiosResponse) => {
                 if (res.status === 200) {
                     let items = res.data.map((user) => {
+			console.log(user)
                         return {
                             name: user.name,
                             team: user.team.name,
