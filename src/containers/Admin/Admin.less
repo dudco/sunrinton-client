@@ -65,3 +65,29 @@
         }
     }
 }
+
+.team {
+    border: 1px solid #eee;
+    &:not(:nth-child(1)) {
+        border-top-color: white;
+    }
+    width: 100%;
+    min-width: 1500px;
+    display: flex;
+    max-height: 70px;
+    min-height: 70px;
+    &:nth-child(1) {
+        & > button {
+            visibility: hidden;
+        }
+        min-height: 30px;
+    }
+    & > span {
+        width: fit-content;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0 10px 0;
+    }
+}

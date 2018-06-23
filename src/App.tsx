@@ -50,7 +50,6 @@ class App extends React.Component<AppProps, any> {
         {
           this.props.history.location.pathname === "/admin" ?
             <Route
-              exact={true}
               path="/admin"
               component={Admin}
             /> :
