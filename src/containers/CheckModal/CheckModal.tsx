@@ -6,6 +6,7 @@ import * as styles from './CheckModal.less';
 const cx = classNames.bind(styles);
 
 import { MoonLoader } from 'react-spinners';
+
 const Loading: React.SFC<{}> = props => (
     <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'fixed' }}>
         <MoonLoader
@@ -25,6 +26,7 @@ export interface CheckModalState {
     loading: boolean;
     name: string;
     team: string;
+    isPass: boolean;
 }
 
 export default class CheckModal extends React.Component<CheckModalProps, CheckModalState> {
@@ -36,7 +38,8 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
             sID: "",
             loading: true,
             name: "",
-            team: ""
+            team: "",
+            isPass: false,
         }
 
         this.onChangeSID = this.onChangeSID.bind(this);
@@ -57,15 +60,14 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
                 <div ref={elem => this.container = elem}>
                     {this.state.loading && <Loading />}
                     {
-                        this.state.name === "" || this.state.team === "" ?
-                            <input type="text" onChange={this.onChangeSID} placeholder={"학번을 입력하세요."} maxLength={5} /> :
-                            this.state.name === "err" && this.state.team === "err" ?
-                                <span>"{this.state.sID}"번호로 신청된 정보를 찾지 못했습니다.</span> :
-                                <span>"{this.state.name}"님은 "{this.state.team}"팀으로 신청됐습니다.</span>
+                        this.state.team === "" ?
+                            <input type="text" onChange={this.onChangeSID} placeholder={"팀명을 입력하세요."} maxLength={10} /> :
+                            this.state.team  === "none" ? <span>"{this.state.sID}"팀을 찾을 수 없습니다.</span> : 
+                            this.state.isPass ? <span>"{this.state.team}"팀은 통과하셨습니다!!</span> : <span>"{this.state.team}"팀은 <br/> 아쉽게도 저희와 함께하실 수 없습니다 ㅠㅠ</span>
                     }
 
                     {
-                        this.state.name === "" || this.state.team === "" ?
+                        this.state.team === "" ?
                             <div>
                                 <button onClick={this.onClickConfirm}>확인</button>
                                 <button onClick={this.onClickCancel}>취소</button>
@@ -95,13 +97,16 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
 
         if(this.state.sID !== "") {
             this.setState({ loading: true });
-            axios.get(`/api/user/${this.state.sID}`)
+            axios.get(`/api/pass/${this.state.sID}`)
                 .then((res: AxiosResponse) => {
+                    console.log(res.data);
                     this.setState({ loading: false });
-                    if (res.status === 200) {
-                        this.setState({ name: res.data.name, team: res.data.team });
+                    if(res.data.team === "none") {
+                        this.setState({team: "none", isPass: false})
+                    } else if (!res.data.isPass && res.data.team !== "none") {
+                        this.setState({team: res.data.team, isPass: false});
                     } else {
-                        this.setState({ name: "err", team: "err" });
+                        this.setState({team: res.data.team, isPass: true});
                     }
                 })
         }
