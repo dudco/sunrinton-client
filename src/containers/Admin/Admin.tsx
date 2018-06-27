@@ -19,6 +19,7 @@ export interface User {
     project?: string;
     portpolio?: string;
     size?: string;
+    isCheck?: boolean;
 }
 
 export interface Team {
@@ -73,7 +74,8 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                     <div className={styles.idx}>
                         <User header={true} />
                         {this.state.items.map((user: User, idx) => {
-                            return <User idx={idx} key={idx} header={false} user={user} />
+                            console.log(user)
+                            return <User idx={idx} key={idx} header={false} user={user} onClickPass={this.onClickUserPass}/>
                         })}
                     </div>
                 )
@@ -135,11 +137,16 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                             portpolio: user.portpolio,
                             project: user.project,
                             size: user.size,
-                            gender: user.gender
+                            gender: user.gender,
+                            isCheck: user.isCheck
                         }
                     });
                     items = items.sort((a: User, b: User) => {
-                        if (a.team < b.team) {
+                        if(a.isCheck) {
+                            return 1;
+                        } else if (b.isCheck) {
+                            return -1;
+                        } else if (a.team < b.team) {
                             return -1;
                         } else if (a.team > b.team) {
                             return 1;
@@ -147,6 +154,11 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                             return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
                         }
                     });
+
+                    // items.sort((a: User, b: User) => {
+                    //     return (a.isCheck === b.isCheck)? 0 : a.isCheck? 1 : -1;
+                    // });
+
                     this.setState({ check: true, items })
                 }
                 else {
@@ -181,17 +193,27 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
            window.focus();
         })
     }
+
+    private onClickUserPass(name) {
+        console.log(name);
+        axios.post(`/api/check/${name}`).then((res: AxiosResponse) => {
+            if(res.status === 200 && res.data.message === "okay") {
+                location.reload();
+            }
+        });
+    }
 }
 
 interface UserProps {
     user?: User;
     header: boolean;
     idx?: number;
+    onClickPass?(name);
 }
 
 
 const User: React.SFC<UserProps> = (props) => (
-    <div className={styles.user}>
+    <div className={styles.user} style={{background:  props.user && props.user.isCheck ? "yellow" : "white"}}>
         <span>{props.header ? "" : props.idx + 1}</span>
         <span>{props.header ? "팀명" : props.user.team}</span>
         <span>{props.header ? "이름" : props.user.name}</span>
@@ -203,8 +225,7 @@ const User: React.SFC<UserProps> = (props) => (
         <span>{props.header ? "포트폴리오" : <Link to={props.user.portpolio} target="_black">다운로드</Link>}</span>
         <span>{props.header ? "사이즈" : props.user.size}</span>
         <span>{props.header ? "프로젝트" : <pre>{props.user.project}</pre>}</span>
-        <button>수정</button>
-        <button>삭제</button>
+        <button onClick={() => {props.onClickPass(props.user.name)}}>입장!</button>
     </div>
 )
 interface TeamProps {
