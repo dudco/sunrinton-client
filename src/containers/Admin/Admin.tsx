@@ -159,22 +159,14 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                             return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
                         }
                     });
+                    console.log("생활 - 팀장", this.getSizes(items, "팀장", "생활"))
+                    console.log("생활 - 개발", this.getSizes(items, "개발", "생활"))
+                    console.log("생활 - 디자인", this.getSizes(items, "디자인", "생활"))
+                    console.log("\n");
+                    console.log("게임 - 팀장", this.getSizes(items, "팀장", "게임"))
+                    console.log("게임 - 개발", this.getSizes(items, "개발", "게임"))
+                    console.log("게임 - 디자인", this.getSizes(items, "디자인", "게임"))
 
-                    const S = items.filter((i) => i.size === "S");
-                    const M = items.filter((i) => i.size === "M");
-                    const L = items.filter((i) => i.size === "L");
-                    const XL = items.filter((i) => i.size === "XL");
-                    const XL2 = items.filter((i) => i.size === "2XL");
-
-                    console.log("S:   ", S.length);
-                    console.log("M:   ", M.length);
-                    console.log("L:   ", L.length);
-                    console.log("XL:  ", XL.length);
-                    console.log("XL2: ", XL2.length);
-
-                    // items.sort((a: User, b: User) => {
-                    //     return (a.isCheck === b.isCheck)? 0 : a.isCheck? 1 : -1;
-                    // });
 
                     this.setState({ check: true, items })
                 }
@@ -266,6 +258,18 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             });
         }
         this.setState({items: newItems, order: this.state.order === "teamI" ? "teamD" : "teamI"});
+    }
+
+    private getSizes(items, role, type) {
+        const chItems = items.filter((i) => i.role === role);
+
+        const S = chItems.filter((i) => i.size === "S" && i.type === type).length;
+        const M = chItems.filter((i) => i.size === "M" && i.type === type).length;
+        const L = chItems.filter((i) => i.size === "L" && i.type === type).length;
+        const XL = chItems.filter((i) => i.size === "XL" && i.type === type).length;
+        const XL2 = chItems.filter((i) => i.size === "2XL" && i.type === type).length;
+        
+        return {S, M, L, XL, XL2};
     }
 }
 
