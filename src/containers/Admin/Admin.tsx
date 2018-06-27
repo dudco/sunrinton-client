@@ -32,9 +32,11 @@ export interface AdminState {
     check: boolean;
     items: User[] & Team[];
     params;
+    order: string;
 }
 
 const roleOrder: string[] = ["팀장", "개발", "디자인"];
+const sizeOrder: string[] = ["M", "L", "XL", "2XL"];
 export default class Admin extends React.Component<AdminProps, AdminState> {
     constructor(props) {
         super(props);
@@ -44,10 +46,14 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             check: false,
             items: [],
             params: null,
+            order: "teamI" // teamI 팀으로 오름차순 teamD 팀으로 내림차순
         }
 
         this.pwConfirm = this.pwConfirm.bind(this);
         this.onChangePW = this.onChangePW.bind(this);
+
+        this.onOrderSize = this.onOrderSize.bind(this);
+        this.onOrderTeam = this.onOrderTeam.bind(this);
     }
 
     public componentDidMount() {
@@ -72,9 +78,8 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
             if (params.get('type') === "users") {
                 return (
                     <div className={styles.idx}>
-                        <User header={true} />
+                        <User header={true}  onOrderSize={this.onOrderSize} onOrderTeam={this.onOrderTeam} />
                         {this.state.items.map((user: User, idx) => {
-                            console.log(user)
                             return <User idx={idx} key={idx} header={false} user={user} onClickPass={this.onClickUserPass}/>
                         })}
                     </div>
@@ -142,7 +147,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                         }
                     });
                     items = items.sort((a: User, b: User) => {
-                        if(a.isCheck) {
+                        if (a.isCheck) {
                             return 1;
                         } else if (b.isCheck) {
                             return -1;
@@ -154,6 +159,18 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
                             return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
                         }
                     });
+
+                    const S = items.filter((i) => i.size === "S");
+                    const M = items.filter((i) => i.size === "M");
+                    const L = items.filter((i) => i.size === "L");
+                    const XL = items.filter((i) => i.size === "XL");
+                    const XL2 = items.filter((i) => i.size === "2XL");
+
+                    console.log("S:   ", S.length);
+                    console.log("M:   ", M.length);
+                    console.log("L:   ", L.length);
+                    console.log("XL:  ", XL.length);
+                    console.log("XL2: ", XL2.length);
 
                     // items.sort((a: User, b: User) => {
                     //     return (a.isCheck === b.isCheck)? 0 : a.isCheck? 1 : -1;
@@ -171,7 +188,7 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
         axios.post('/api/teams', { passwd: this.state.passwd })
             .then((res: AxiosResponse) => {
                 let items = res.data.map((team) => {
-                return {
+                    return {
                         name: team.name,
                         users: team.users,
                     }
@@ -189,18 +206,66 @@ export default class Admin extends React.Component<AdminProps, AdminState> {
 
     private onClickTeamDownLoad(name: string) {
         axios.get(`/api/team/${name}`).then((res: AxiosResponse) => {
-           window.open(res.data, '_blank');
-           window.focus();
+            window.open(res.data, '_blank');
+            window.focus();
         })
     }
 
     private onClickUserPass(name) {
         console.log(name);
         axios.post(`/api/check/${name}`).then((res: AxiosResponse) => {
-            if(res.status === 200 && res.data.message === "okay") {
+            if (res.status === 200 && res.data.message === "okay") {
                 location.reload();
             }
         });
+    }
+
+    private onOrderSize() {
+        let newItems;
+        if(this.state.order === "sizeI") {
+            newItems = this.state.items.sort((a: User, b: User) => {
+                return sizeOrder.indexOf(b.size) - sizeOrder.indexOf(a.size);
+            });
+        } else {
+            newItems = this.state.items.sort((a: User, b: User) => {
+                return sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size);
+            });
+        }
+        this.setState({items: newItems, order: this.state.order === "sizeI" ? "sizeD" : "sizeI"});
+    }
+
+    private onOrderTeam() {
+        let newItems;
+        if(this.state.order === "teamI") {
+            newItems = this.state.items.sort((a: User, b: User) => {
+                if (a.isCheck) {
+                    return 1;
+                } else if (b.isCheck) {
+                    return -1;
+                } else if (a.team > b.team) {
+                    return -1;
+                } else if (a.team < b.team) {
+                    return 1;
+                } else {
+                    return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+                }
+            });
+        } else {
+            newItems = this.state.items.sort((a: User, b: User) => {
+                if (a.isCheck) {
+                    return 1;
+                } else if (b.isCheck) {
+                    return -1;
+                } else if (a.team < b.team) {
+                    return -1;
+                } else if (a.team > b.team) {
+                    return 1;
+                } else {
+                    return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+                }
+            });
+        }
+        this.setState({items: newItems, order: this.state.order === "teamI" ? "teamD" : "teamI"});
     }
 }
 
@@ -209,13 +274,18 @@ interface UserProps {
     header: boolean;
     idx?: number;
     onClickPass?(name);
+    onOrderSize?();
+    onOrderTeam?();
 }
 
 
 const User: React.SFC<UserProps> = (props) => (
-    <div className={styles.user} style={{background:  props.user && props.user.isCheck ? "yellow" : "white"}}>
+    <div className={styles.user} style={{ background: props.user && props.user.isCheck ? "yellow" : "white" }}>
         <span>{props.header ? "" : props.idx + 1}</span>
-        <span>{props.header ? "팀명" : props.user.team}</span>
+        {props.header ?
+            <span onClick={() => { props.onOrderTeam()}}>{props.header ? "팀명" : props.user.team}</span> :
+            <span >{props.header ? "팀명" : props.user.team}</span>
+        }
         <span>{props.header ? "이름" : props.user.name}</span>
         <span>{props.header ? "성별" : props.user.gender}</span>
         <span>{props.header ? "연락처" : props.user.phone}</span>
@@ -223,9 +293,13 @@ const User: React.SFC<UserProps> = (props) => (
         <span>{props.header ? "직군" : props.user.role}</span>
         <span>{props.header ? "분야" : props.user.type}</span>
         <span>{props.header ? "포트폴리오" : <Link to={props.user.portpolio} target="_black">다운로드</Link>}</span>
-        <span>{props.header ? "사이즈" : props.user.size}</span>
+
+        {props.header ?
+            <span onClick={() => { props.onOrderSize()}}>{props.header ? "사이즈" : props.user.size}</span> :
+            <span >{props.header ? "사이즈" : props.user.size}</span>
+        }
         <span>{props.header ? "프로젝트" : <pre>{props.user.project}</pre>}</span>
-        <button onClick={() => {props.onClickPass(props.user.name)}}>입장!</button>
+        <button onClick={() => { props.onClickPass(props.user.name) }}>입장!</button>
     </div>
 )
 interface TeamProps {
@@ -240,12 +314,12 @@ const Team: React.SFC<TeamProps> = (props) => (
         <span>{props.header ? "" : props.idx + 1}</span>
         <span>{props.header ? "팀명" : props.team.name}</span>
         <span>{props.header ? "분야" : props.team.users[0].type}</span>
-        <span>{props.header ? "팀원" : <span>{props.team.users.map((user, idx) => (props.team.users.length !== idx+1 ? user.name + ", " : user.name))}</span>}</span>
+        <span>{props.header ? "팀원" : <span>{props.team.users.map((user, idx) => (props.team.users.length !== idx + 1 ? user.name + ", " : user.name))}</span>}</span>
         {/* <span>{props.header ? "연락처" : props.user.phone}</span> */}
         {/* <span>{props.header ? "학번" : props.user.sID}</span> */}
         {/* <span>{props.header ? "직군" : props.user.role}</span> */}
         {/* <span>{props.header ? "분야" : props.user.type}</span> */}
-        <span>{props.header ? "포트폴리오" : <button onClick={() => {props.onClickDownLoad(props.team.name)}}>다운로드</button>}</span>
+        <span>{props.header ? "포트폴리오" : <button onClick={() => { props.onClickDownLoad(props.team.name) }}>다운로드</button>}</span>
         {/* <span>{props.header ? "사이즈" : props.user.size}</span> */}
         {/* <span>{props.header ? "프로젝트" : <pre>{props.user.project}</pre>}</span> */}
         <button>수정</button>
