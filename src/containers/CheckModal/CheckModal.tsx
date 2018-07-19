@@ -27,6 +27,7 @@ export interface CheckModalState {
     name: string;
     team: string;
     isPass: boolean;
+    isHover: string;
 }
 
 export default class CheckModal extends React.Component<CheckModalProps, CheckModalState> {
@@ -40,6 +41,7 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
             name: "",
             team: "",
             isPass: false,
+            isHover: "none"            
         }
 
         this.onChangeSID = this.onChangeSID.bind(this);
@@ -54,28 +56,26 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
         this.setState({ loading: false });
     }
 
+
     public render() {
         return (
             <div className={cx(styles.idx, { show: this.props.show === "show", none: this.props.show === "disable" })}>
                 <div ref={elem => this.container = elem}>
                     {this.state.loading && <Loading />}
                     {
-                        this.state.team === "" ?
-                            <input type="text" onChange={this.onChangeSID} placeholder={"팀명을 입력하세요."} maxLength={10} /> :
-                            this.state.team  === "none" ? <span>"{this.state.sID}"팀을 찾을 수 없습니다.</span> : 
-                            this.state.isPass ? <span>"{this.state.team}"팀은 통과하셨습니다!!</span> : <span>"{this.state.team}"팀은 <br/> 아쉽게도 저희와 함께하실 수 없습니다 ㅠㅠ</span>
+                        this.props.show !== "disabled" ? 
+                        <div>
+                            <span className={cx({isHover:this.state.isHover === "item1"})} onMouseOver={() => {this.setState({isHover: "item1"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>기상이변</span>
+                            <span className={cx({isHover:this.state.isHover === "item2"})} onMouseOver={() => {this.setState({isHover: "item2"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>생존</span>
+                            <span className={cx({isHover:this.state.isHover === "item3"})} onMouseOver={() => {this.setState({isHover: "item3"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>도시문제</span>
+                        </div> : 
+                        <div>
+                            개발자도구 꺼라 ㅋ
+                        </div>
                     }
-
-                    {
-                        this.state.team === "" ?
-                            <div>
-                                <button onClick={this.onClickConfirm}>확인</button>
-                                <button onClick={this.onClickCancel}>취소</button>
-                            </div> :
-                            <div>
-                                <button onClick={this.onClickCancel}>확인</button>
-                            </div>
-                    }
+                    <div>
+                        <button onClick={this.onClickCancel}>확인</button>
+                    </div>
                 </div>
             </div>
         );

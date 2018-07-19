@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as React from 'react';
 
 // import { Link } from 'react-router-dom';
@@ -73,11 +74,11 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
           {/* <Timer time={this.state.timer}/> */}
           {/* <Link to="apply">GET STARTED</Link> */}
-          <span>신청해주셔서 감사합니다! <br/> 지금 바로 결과를 확인해보세요!</span>
+          <span>주제는 목요일 22시에 공개됩니다!</span>
           <button onClick={this.onClickCheck}>확인하기</button>
           {/* <span>신청까지 얼마남지 않았어요!</span> */}
         </div>
-        <CheckModal 
+        <CheckModal
           show={this.state.showCheckModal}
           onClickCancel={this.cmClickCancel}
           animationEnd={this.cmAnimationEnd}
@@ -91,7 +92,8 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   }
 
   private onClickCheck() {
-    this.setState({showCheckModal: "show"});
+    this.checkTime()
+    // this.setState({showCheckModal: "show"});
   }
 
   private cmClickCancel() {
@@ -102,5 +104,16 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     if(this.state.showCheckModal === "disable") {
       this.setState({showCheckModal: "disabled"})
     }
+  }
+
+  private checkTime() {
+    axios.get('/api/time').then(res => {
+      
+      if(new Date(res.data.date) > new Date("Thu Jul 19 2018 21:00:00 GMT+0900 (한국 표준시)")) {
+        this.setState({showCheckModal: "show"});
+      } else {
+        alert("아직 22시가 아닙니다. ㅠㅠ")
+      }
+    })
   }
 }
