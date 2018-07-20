@@ -74,7 +74,11 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
           {/* <Timer time={this.state.timer}/> */}
           {/* <Link to="apply">GET STARTED</Link> */}
-	  <Timer time={this.state.timer} />
+          {
+            this.state.timer > 0 ? 
+	        <Timer time={this.state.timer} /> : "끝!!!! 수고많으셨습니다~~!!"
+
+          }
           {/* <span>주제는 목요일 22시에 공개됩니다!</span> */}
           <button onClick={this.onClickCheck}>주제 확인하기</button>
           {/* <span>신청까지 얼마남지 않았어요!</span> */}
