@@ -15,12 +15,14 @@ interface TimerProps {
 const Timer: React.SFC<TimerProps> = (props) => {
   return (
       <div className={styles.idx}>
-        { Math.floor(props.time / (1000 * 60 * 60 * 24)) > 0 && <div>{Math.floor(props.time / (1000 * 60 * 60 * 24))}일</div> }
+        { Math.floor(props.time / (1000 * 60 * 60 * 24)) > 0 && <div>{Math.floor(props.time / (1000 * 60 * 60 * 24))}일&nbsp;</div> }
           <div>{Math.floor((props.time / (1000*60*60)) % 24)}</div>
-          <div>:</div>
+          <div>시간&nbsp;</div>
           <div>{Math.floor((props.time / (1000*60)) % 60)}</div>
-          <div>:</div>
+          <div>분&nbsp;</div>
           <div>{Math.floor((props.time / 1000) % 60)}</div>
+          <div>초&nbsp;</div>
+          <div>&nbsp;후에&nbsp;종료됩니다!!</div>
       </div>
   )
 };

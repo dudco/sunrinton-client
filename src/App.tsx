@@ -75,7 +75,7 @@ class App extends React.Component<AppProps, any> {
     );
   }
   private renderHome(props: any) {
-    return <Home dDay={new Date("2018-7-20 12:00:00")} />
+    return <Home dDay={new Date("2018-7-21 8:00:00")} />
   }
 }
 

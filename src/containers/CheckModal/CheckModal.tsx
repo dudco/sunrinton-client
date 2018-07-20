@@ -65,8 +65,8 @@ export default class CheckModal extends React.Component<CheckModalProps, CheckMo
                     {
                         this.props.show !== "disabled" ? 
                         <div>
-                            <span className={cx({isHover:this.state.isHover === "item1"})} onMouseOver={() => {this.setState({isHover: "item1"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>기상이변</span>
-                            <span className={cx({isHover:this.state.isHover === "item2"})} onMouseOver={() => {this.setState({isHover: "item2"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>생존</span>
+                            {/* <span className={cx({isHover:this.state.isHover === "item1"})} onMouseOver={() => {this.setState({isHover: "item1"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>기상이변</span> */}
+                            {/* <span className={cx({isHover:this.state.isHover === "item2"})} onMouseOver={() => {this.setState({isHover: "item2"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>생존</span> */}
                             <span className={cx({isHover:this.state.isHover === "item3"})} onMouseOver={() => {this.setState({isHover: "item3"})}} onMouseOut={() => {this.setState({isHover: "none"})}}>도시문제</span>
                         </div> : 
                         <div>

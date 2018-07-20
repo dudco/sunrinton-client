@@ -16,7 +16,7 @@ import desk from '../../assets/images/desk.png';
 import CheckModal from '../CheckModal/CheckModal';
 // import stars from '../../assets/images/stars.png';
 
-// import Timer from '../../componenets/Timer/Timer';
+import Timer from '../../componenets/Timer/Timer';
 
 export interface HomeProps {
   dDay: Date;
@@ -74,9 +74,11 @@ export default class Home extends React.Component<HomeProps, HomeState> {
 
           {/* <Timer time={this.state.timer}/> */}
           {/* <Link to="apply">GET STARTED</Link> */}
-          <span>주제는 목요일 22시에 공개됩니다!</span>
-          <button onClick={this.onClickCheck}>확인하기</button>
+          {/* <span>주제는 목요일 22시에 공개됩니다!</span> */}
+          <button onClick={this.onClickCheck}>주제 확인하기</button>
           {/* <span>신청까지 얼마남지 않았어요!</span> */}
+
+          <Timer time={this.state.timer} />
         </div>
         <CheckModal
           show={this.state.showCheckModal}
